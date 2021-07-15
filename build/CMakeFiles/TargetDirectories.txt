@@ -1,3 +1,0 @@
-/home/angelo/LP1-2021.1-Projeto2-Concordo/build/CMakeFiles/rebuild_cache.dir
-/home/angelo/LP1-2021.1-Projeto2-Concordo/build/CMakeFiles/edit_cache.dir
-/home/angelo/LP1-2021.1-Projeto2-Concordo/build/CMakeFiles/concordo.dir
