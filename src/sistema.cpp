@@ -2,25 +2,56 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <iterator>
+#include "usuario.h"
+#include <map>
 
 using namespace std;
 
 /* COMANDOS */
 string Sistema::quit() {
-  return "Saindo...";
+  return "Saindo do Concordo...";
 }
 
 string Sistema::create_user (const string email, const string senha, const string nome) {
-  return "create_user NÃO IMPLEMENTADO";
+  for(int i=0; i<this->usuarios.size(); i++)
+    if(this->usuarios[i].getEmail() == email)
+      return "Usuário já existe!";
+
+  Usuario temp;
+  
+  temp.setId(this->usuarios.size());
+  temp.setNome(nome);
+  temp.setEmail(email);
+  temp.setSenha(senha);
+
+  usuarios.push_back(temp);
+
+  return "Criando usuário "+temp.getNome()+" ("+temp.getEmail()+")\nUsuário Criado";
 }
 
 string Sistema::login(const string email, const string senha) {
-  return "login NÃO IMPLEMENTADO";
+  for(int i=0; i<this->usuarios.size(); i++)
+    if(this->usuarios[i].getEmail() == email &&
+      this->usuarios[i].getSenha() == senha){
+        this->usuariosLogados.insert(pair<int, pair<string,string>>(this->usuarios[i].getId(), {"",""}));
+        return "Logado como "+this->usuarios[i].getEmail();
+      }
+
+  return "Senha ou usuário inválidos!";
 }
 
 string Sistema::disconnect(int id) {
-  return "disconnect NÃO IMPLEMENTADO";
+  map< int, std::pair<std::string, std::string> >::iterator itr;
+  for(itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      usuariosLogados.erase(id);
+      return "Desconectando usuário "+this->usuarios[id].getEmail();       
+    }
+
+  return "Não está conectado";
 }
+//---------------------Fim Comandos Usuario----------------------
 
 string Sistema::create_server(int id, const string nome) {
   return "create_server NÃO IMPLEMENTADO";
@@ -57,6 +88,7 @@ string Sistema::list_participants(int id) {
 string Sistema::list_channels(int id) {
   return "list_channels NÃO IMPLEMENTADO";
 }
+//---------------------Fim Comandos Servidor----------------------
 
 string Sistema::create_channel(int id, const string nome) {
   return "create_channel NÃO IMPLEMENTADO";
@@ -77,8 +109,5 @@ string Sistema::send_message(int id, const string mensagem) {
 string Sistema::list_messages(int id) {
   return "list_messages NÃO IMPLEMENTADO";
 }
-
-
-
 
 /* IMPLEMENTAR MÉTODOS PARA OS COMANDOS RESTANTES */
