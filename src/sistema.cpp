@@ -1,10 +1,11 @@
 #include "sistema.h"
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-#include <iterator>
 #include "usuario.h"
+#include "servidor.h"
+
+#include <iostream>
+#include <iterator>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -19,12 +20,10 @@ string Sistema::create_user (const string email, const string senha, const strin
       return "Usuário já existe!";
 
   Usuario temp;
-  
   temp.setId(this->usuarios.size());
   temp.setNome(nome);
   temp.setEmail(email);
   temp.setSenha(senha);
-
   usuarios.push_back(temp);
 
   return "Criando usuário "+temp.getNome()+" ("+temp.getEmail()+")\nUsuário Criado";
@@ -37,40 +36,103 @@ string Sistema::login(const string email, const string senha) {
         this->usuariosLogados.insert(pair<int, pair<string,string>>(this->usuarios[i].getId(), {"",""}));
         return "Logado como "+this->usuarios[i].getEmail();
       }
-
   return "Senha ou usuário inválidos!";
 }
 
 string Sistema::disconnect(int id) {
-  map< int, std::pair<std::string, std::string> >::iterator itr;
-  for(itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
       usuariosLogados.erase(id);
       return "Desconectando usuário "+this->usuarios[id].getEmail();       
     }
-
   return "Não está conectado";
 }
-//---------------------Fim Comandos Usuario----------------------
 
 string Sistema::create_server(int id, const string nome) {
-  return "create_server NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      for(int i=0; i<this->servidores.size(); i++)
+        if(this->servidores[i].getNome() == nome)
+          return "Servidor com esse nome já existe";
+      
+      Servidor temp;
+      temp.setDonoId(id);
+      temp.setNome(nome);
+      servidores.push_back(temp);
+
+      return "Servidor criado"; 
+    }
+  return "Usuário não conectado";
 }
 
 string Sistema::set_server_desc(int id, const string nome, const string descricao) {
-  return "set_server_desc NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == nome){
+          if(servidores[i].getDonoId() == id){
+            servidores[i].setDescricao(descricao);
+            return "Descrição do servidor ‘"+nome+"’ modificada!";
+          }else
+            return "Você não pode alterar a descrição de um servidor que não foi criado por você";
+        }
+      return "Servidor ‘"+nome+"’ não existe";
+    }
+  return "Usuário não conectado";
 }
 
 string Sistema::set_server_invite_code(int id, const string nome, const string codigo) {
-  return "set_server_invite_code NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){  
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == nome){
+          if(servidores[i].getDonoId() == id){
+            if(codigo != ""){
+              servidores[i].setCodigo(codigo);
+              return "Código de convite do servidor ‘"+nome+"’ modificado!";
+            }else{
+              servidores[i].setCodigo("");
+              return "Código de convite do servidor ‘"+nome+"’ removido!";
+            }
+          }else
+            return "Você não pode alterar o codigo de convite de um servidor que não foi criado por você";
+        }
+      return "Servidor ‘"+nome+"’ não existe";
+    }
+  return "Usuário não conectado";
 }
 
 string Sistema::list_servers(int id) {
-  return "list_servers NÃO IMPLEMENTADO";
+  string saida;
+  for(int i=0; i<servidores.size(); i++)
+    if(servidores[i].getDonoId() == id){
+      if(saida == "")
+        saida += servidores[i].getNome();
+      else{
+        saida += "\n";
+        saida += servidores[i].getNome();
+      }
+    }
+  return saida;
 }
 
 string Sistema::remove_server(int id, const string nome) {
-  return "remove_server NÃO IMPLEMENTADO";
+  int i;
+  auto itr2=servidores.begin();
+
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      for(i=0, itr2=servidores.begin(); itr2!=servidores.end(); i++, ++itr2)
+        if(nome == servidores[i].getNome()){
+          if(servidores[i].getDonoId() == id){
+            servidores.erase(itr2);
+            return "Servidor ‘"+nome+"’ removido";
+          }else
+            return "Você não é o dono do servidor ‘"+nome+"’";
+        }
+      return "Servidor ‘"+nome+"’ não encontrado";
+    }
+  return "Usuário não logado";
 }
 
 string Sistema::enter_server(int id, const string nome, const string codigo) {
@@ -88,7 +150,6 @@ string Sistema::list_participants(int id) {
 string Sistema::list_channels(int id) {
   return "list_channels NÃO IMPLEMENTADO";
 }
-//---------------------Fim Comandos Servidor----------------------
 
 string Sistema::create_channel(int id, const string nome) {
   return "create_channel NÃO IMPLEMENTADO";
