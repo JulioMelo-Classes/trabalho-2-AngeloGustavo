@@ -87,13 +87,11 @@ string Sistema::set_server_invite_code(int id, const string nome, const string c
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == nome){
           if(servidores[i].getDonoId() == id){
-            if(codigo != ""){
-              servidores[i].setCodigo(codigo);
+            servidores[i].setCodigo(codigo);
+            if(codigo != "")
               return "Código de convite do servidor ‘"+nome+"’ modificado!";
-            }else{
-              servidores[i].setCodigo("");
+            else
               return "Código de convite do servidor ‘"+nome+"’ removido!";
-            }
           }else
             return "Você não pode alterar o codigo de convite de um servidor que não foi criado por você";
         }
@@ -106,30 +104,28 @@ string Sistema::list_servers(int id) {
   string saida;
   for(int i=0; i<servidores.size(); i++)
     if(servidores[i].getDonoId() == id){
-      if(saida == "")
-        saida += servidores[i].getNome();
-      else{
+      if(saida != "")
         saida += "\n";
-        saida += servidores[i].getNome();
-      }
+      saida += servidores[i].getNome();
     }
   return saida;
 }
 
 string Sistema::remove_server(int id, const string nome) {
-  int i;
-  auto itr2=servidores.begin();
+  int cont;
 
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
-      for(i=0, itr2=servidores.begin(); itr2!=servidores.end(); i++, ++itr2)
-        if(nome == servidores[i].getNome()){
-          if(servidores[i].getDonoId() == id){
+      cont=0;
+      for(auto itr2=servidores.begin(); itr2!=servidores.end(); ++itr2){
+        if(nome == servidores[cont].getNome()){
+          if(servidores[cont].getDonoId() == id){
             servidores.erase(itr2);
             return "Servidor ‘"+nome+"’ removido";
           }else
             return "Você não é o dono do servidor ‘"+nome+"’";
-        }
+        }cont++;
+      }
       return "Servidor ‘"+nome+"’ não encontrado";
     }
   return "Usuário não logado";
