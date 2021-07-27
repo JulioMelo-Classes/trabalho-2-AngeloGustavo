@@ -3,6 +3,10 @@
 #include <string>
 using namespace std;
 
+/*
+Classe usuário CP1 ok
+Usualmente os dados vem antes dos métodos
+*/
 class Usuario{
 	public:
 		void setId(int _id);

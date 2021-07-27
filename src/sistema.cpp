@@ -14,6 +14,9 @@ string Sistema::quit() {
   return "Saindo do Concordo...";
 }
 
+/*
+A1.2 ok
+*/
 string Sistema::create_user (const string email, const string senha, const string nome) {
   for(int i=0; i<this->usuarios.size(); i++)
     if(this->usuarios[i].getEmail() == email)
@@ -29,16 +32,22 @@ string Sistema::create_user (const string email, const string senha, const strin
   return "Criando usuário "+temp.getNome()+" ("+temp.getEmail()+")\nUsuário Criado";
 }
 
+/*
+A1.3 ok
+*/
 string Sistema::login(const string email, const string senha) {
   for(int i=0; i<this->usuarios.size(); i++)
     if(this->usuarios[i].getEmail() == email &&
-      this->usuarios[i].getSenha() == senha){
+       this->usuarios[i].getSenha() == senha){ //arrumei o alinhamento
         this->usuariosLogados.insert(pair<int, pair<string,string>>(this->usuarios[i].getId(), {"",""}));
         return "Logado como "+this->usuarios[i].getEmail();
       }
   return "Senha ou usuário inválidos!";
 }
 
+/*
+A2.1 ok
+*/
 string Sistema::disconnect(int id) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -48,6 +57,9 @@ string Sistema::disconnect(int id) {
   return "Não está conectado";
 }
 
+/*
+A2.2 ok
+*/
 string Sistema::create_server(int id, const string nome) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -65,6 +77,9 @@ string Sistema::create_server(int id, const string nome) {
   return "Usuário não conectado";
 }
 
+/*
+A2.3 ok
+*/
 string Sistema::set_server_desc(int id, const string nome, const string descricao) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -81,6 +96,9 @@ string Sistema::set_server_desc(int id, const string nome, const string descrica
   return "Usuário não conectado";
 }
 
+/*
+A2.4 ok
+*/
 string Sistema::set_server_invite_code(int id, const string nome, const string codigo) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){  
@@ -100,6 +118,9 @@ string Sistema::set_server_invite_code(int id, const string nome, const string c
   return "Usuário não conectado";
 }
 
+/*
+A2.5 ok
+*/
 string Sistema::list_servers(int id) {
   string saida;
   for(int i=0; i<servidores.size(); i++)
@@ -111,6 +132,10 @@ string Sistema::list_servers(int id) {
   return saida;
 }
 
+/*
+A2.6 ok
+Não vou tirar pontos, mas faltou atualizar os outros usuários que pudessem estar conectados no servidor.
+*/
 string Sistema::remove_server(int id, const string nome) {
   int cont;
 
@@ -124,7 +149,7 @@ string Sistema::remove_server(int id, const string nome) {
             return "Servidor ‘"+nome+"’ removido";
           }else
             return "Você não é o dono do servidor ‘"+nome+"’";
-        }cont++;
+        }cont++; //isso aqui é um erro de indentação, não vou tirar pontos por enquanto!
       }
       return "Servidor ‘"+nome+"’ não encontrado";
     }

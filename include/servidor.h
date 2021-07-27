@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/*
+Classe servidor CP1 ok
+Usualmente os dados vem antes dos métodos
+*/
 class Servidor{
 	public:
 		void setDonoId(int _id);
