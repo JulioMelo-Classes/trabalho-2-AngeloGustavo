@@ -17,7 +17,6 @@ class Sistema {
 		std::vector<Usuario> usuarios; //<! um vetor com todos os usuários cadastrados
 		std::map< int, std::pair<std::string, std::string> > usuariosLogados; //<! um vetor contendo os usuários que logaram no sistema
 		
-
   public:
 
 		/*! Encerra o funcionamento do Concordo, o programa termina ao executar este comando.
@@ -175,6 +174,8 @@ class Sistema {
 				@return uma string vazia em caso de sucesso ou uma mensagem de erro em caso de falha.
 		*/
 		std::string list_messages(int id);
+
+		std::string getNomeByID(int id);
 };
 
 #endif
