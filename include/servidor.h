@@ -1,6 +1,8 @@
 #ifndef SERVIDOR_H
 #define SERVIDOR_H
 
+#include "canaltexto.h"
+
 #include <vector>
 #include <string>
 
@@ -12,8 +14,8 @@ class Servidor{
 		string nome;
 		string descricao;
 		string codigoConvite;
-		//vector<CanalTexto> canaisTexto;
 		vector<int> participantesIDs;
+		vector<CanalTexto> canaisTexto;
 
 	public:
 		void setDonoId(int _id);
@@ -30,6 +32,10 @@ class Servidor{
 
 		void addParticipante(int _id);
 		void delParticipante(int _id);
+
+		vector<string> getCanais();
+
+		void addCanal(string nome);
 };
 
 #endif
