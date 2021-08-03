@@ -1,6 +1,8 @@
 #include "sistema.h"
 #include "usuario.h"
 #include "servidor.h"
+#include "mensagem.h"
+#include "canaltexto.h"
 
 #include <iostream>
 #include <iterator>
@@ -201,19 +203,59 @@ string Sistema::getNomeByID(int id){
 //Fim parte 1
 
 string Sistema::list_channels(int id) {
-  return "list_channels NÃO IMPLEMENTADO";
+  string saida;
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id)
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == (itr->second).first){
+          vector<string> aux = servidores[i].getCanais();
+          for(int i=0; i<aux.size(); i++){
+            if(saida != "")
+                saida += "\n";
+            saida += aux[i];
+          }return saida;
+        }
+  return "Usuário não conectado";
 }
 
 string Sistema::create_channel(int id, const string nome) {
-  return "create_channel NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id)
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == (itr->second).first){
+          vector<string> aux = servidores[i].getCanais();
+          for(int i=0; i<aux.size(); i++)
+            if(aux[i] == nome)
+              return "Canal de texto ‘"+nome+"’ já existe!";
+          servidores[i].addCanal(nome);
+          return "Canal de texto ‘"+nome+"’ criado";
+        }
+  return "Usuário não conectado";
 }
 
 string Sistema::enter_channel(int id, const string nome) {
-  return "enter_channel NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id)
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == (itr->second).first){
+          vector<string> aux = servidores[i].getCanais();
+          for(int j=0; j<aux.size(); j++)
+            if(aux[i] == nome){
+              (itr->second).second = nome;
+              return "Entrou no canal ‘"+nome+"’";
+            }
+          return "Canal ‘"+nome+"’ não existe";
+        }
+  return "Usuário não conectado";
 }
 
 string Sistema::leave_channel(int id) {
-  return "leave_channel NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      (itr->second).second = "";
+      return "Saindo do canal";
+    }
+  return "Usuário não conectado";
 }
 
 string Sistema::send_message(int id, const string mensagem) {
