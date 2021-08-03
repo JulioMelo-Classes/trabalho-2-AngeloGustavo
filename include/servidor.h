@@ -6,7 +6,15 @@
 
 using namespace std;
 
-class Servidor{
+class Servidor{		 
+	private:
+		int usuarioDonoId;
+		string nome;
+		string descricao;
+		string codigoConvite;
+		//vector<CanalTexto> canaisTexto;
+		vector<int> participantesIDs;
+
 	public:
 		void setDonoId(int _id);
 		int getDonoId();
@@ -19,13 +27,9 @@ class Servidor{
 
 		void setCodigo(string _codigo);
 		string getCodigo();
-	private:
-		int usuarioDonoId;
-		string nome;
-		string descricao;
-		string codigoConvite;
-		//vector<CanalTexto> canaisTexto;
-		//vector<int> participantesIDs;
+
+		void addParticipante(int _id);
+		void delParticipante(int _id);
 };
 
 #endif
