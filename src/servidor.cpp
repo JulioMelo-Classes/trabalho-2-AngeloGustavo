@@ -48,3 +48,17 @@ void Servidor::delParticipante(int _id){//Reformular método
     }
     participantesIDs.erase(posicao);
 };
+
+vector<string> Servidor::getCanais(){
+    vector<string> saida;
+    for(int i=0; i<canaisTexto.size(); i++){
+        saida.push_back(canaisTexto[i].getNome());
+    }
+    return saida;
+};
+
+void Servidor::addCanal(string nome){
+    CanalTexto temp;
+    temp.setNome(nome);
+    canaisTexto.push_back(temp);
+}
