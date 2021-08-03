@@ -4,6 +4,12 @@
 using namespace std;
 
 class Usuario{
+	private:
+		int id;
+		string nome;
+		string senha;
+		string email;
+		
 	public:
 		void setId(int _id);
 		int getId();
@@ -16,12 +22,6 @@ class Usuario{
 
 		void setEmail(string _email);
 		string getEmail();
-
-	private:
-		int id;
-		string nome;
-		string senha;
-		string email;
 };
 
 #endif
