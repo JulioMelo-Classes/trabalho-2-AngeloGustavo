@@ -1,6 +1,7 @@
 #include "mensagem.h"
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
