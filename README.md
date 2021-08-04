@@ -18,3 +18,15 @@ Ou pode criar um arquivo de texto com uma lista de comandos (um por linha) e exe
 ```console
 ./concordo < ../script.txt
 ```
+
+## Autor
+
+Angelo Gustavo Souza Marinho Morais de Sales -
+[GitHub](https://github.com/AngeloGustavo)
+
+## Contato
+
+Angelo Gustavo Souza Marinho Morais de Sales -
+*<angelo.sales.703@ufrn.edu.br>*
+
+Link do projeto: [https://github.com/JulioMelo-Classes/trabalho-2-AngeloGustavo.git](https://github.com/JulioMelo-Classes/trabalho-2-AngeloGustavo.git)
