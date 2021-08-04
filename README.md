@@ -1,6 +1,12 @@
 # Projeto 2: Concordo
+Clone do Discord, para humanos mais civilizados.
 
-## Compilando com cmake:
+## O que é o Concordo?
+Um sistema com recursos similares ao Discord, mas que funciona somente em modo texto e sem recursos de
+rede. 
+
+## Como compilar o projeto:
+Na pasta do projeto realize os próximos comandos para compilar o programa com cmake
 ```console
 mkdir build
 cd build
@@ -8,15 +14,29 @@ cmake ..
 cmake --build .
 ```
 
-## Para executar
-Você pode rodar o sistema e em logo depois digitar os comandos seguidos de ENTER
+## Como executar o projeto
+Você pode rodar o programa gerado e logo depois digitar os comandos seguidos de ENTER
 ```console
 ./concordo
 ```
 
 Ou pode criar um arquivo de texto com uma lista de comandos (um por linha) e executar o sistema redirecionando esse arquivo como entrada padrão:
 ```console
-./concordo < ../script.txt
+./concordo < script.txt
+```
+## Como executar o conjunto dos testes
+### Para realizar os testes...
+Teste 1(...)
+```console
+./concordo < ../data/teste1.txt
+```
+Teste 2(...)
+```console
+./concordo < ../data/teste2.txt
+```
+Teste 3(...) 
+```console
+./concordo < ../data/teste3.txyt
 ```
 
 ## Autor
