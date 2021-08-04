@@ -21,11 +21,7 @@ string Sistema::create_user (const string email, const string senha, const strin
     if(this->usuarios[i].getEmail() == email)
       return "Usuário já existe!";
 
-  Usuario temp;
-  temp.setId(this->usuarios.size());
-  temp.setNome(nome);
-  temp.setEmail(email);
-  temp.setSenha(senha);
+  Usuario temp(this->usuarios.size(), nome, senha, email);
   usuarios.push_back(temp);
 
   return "Criando usuário "+temp.getNome()+" ("+temp.getEmail()+")\nUsuário Criado";
@@ -33,11 +29,10 @@ string Sistema::create_user (const string email, const string senha, const strin
 
 string Sistema::login(const string email, const string senha) {
   for(int i=0; i<this->usuarios.size(); i++)
-    if(this->usuarios[i].getEmail() == email &&
-      this->usuarios[i].getSenha() == senha){
-        this->usuariosLogados.insert({this->usuarios[i].getId(), {"",""}});
-        return "Logado como "+this->usuarios[i].getEmail();
-      }
+    if(usuarios[i].checkLogin(email, senha) == true){
+      this->usuariosLogados.insert({this->usuarios[i].getId(), {"",""}});
+      return "Logado como "+this->usuarios[i].getEmail();
+    }
   return "Senha ou usuário inválidos!";
 }
 
@@ -57,11 +52,8 @@ string Sistema::create_server(int id, const string nome) {
         if(this->servidores[i].getNome() == nome)
           return "Servidor com esse nome já existe";
       
-      Servidor temp;
-      temp.setDonoId(id);
-      temp.setNome(nome);
+      Servidor temp(id, nome);
       servidores.push_back(temp);
-
       return "Servidor criado"; 
     }
   return "Usuário não conectado";
@@ -103,19 +95,20 @@ string Sistema::set_server_invite_code(int id, const string nome, const string c
 }
 
 string Sistema::list_servers(int id) {
-  string saida;
-  for(int i=0; i<servidores.size(); i++)
-    if(servidores[i].getDonoId() == id){
-      if(saida != "")
-        saida += "\n";
-      saida += servidores[i].getNome();
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      for(int i=0; i<servidores.size(); i++){
+        if(i>0)
+          cout<<endl;
+        cout<<servidores[i].getNome();
+      }
+      return "";
     }
-  return saida;
+  return "Usuário não conectado";
 }
 
 string Sistema::remove_server(int id, const string nome) {//Rever uso do cont
   int cont;
-
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
       cont=0;
@@ -170,7 +163,7 @@ string Sistema::leave_server(int id, const string nome) {
           }else if((itr->second).first == "")
             return "Você não está visualizando nenhum servidor";
           else
-            return "Voce não está neste servidor";
+            return "Você não está nesse servidor";
         }
       return "Servidor ‘"+nome+"’ não encontrado";
     }
@@ -178,29 +171,25 @@ string Sistema::leave_server(int id, const string nome) {
 }
 
 string Sistema::list_participants(int id) {
-  string saida;
+  bool primeiro = true;
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
       if((itr->second).first == "")
         return "Você não está em um servidor";
       for(auto itr2=usuariosLogados.begin(); itr2!=usuariosLogados.end(); ++itr2)
         if((itr->second).first == (itr2->second).first){
-          if(saida != "")
-            saida += "\n";
-          saida += getNomeByID(itr2->first);
+          if(primeiro == true)
+            primeiro = false;
+          else
+            cout<<endl;
+          for(int i=0; i<usuarios.size(); i++)
+            if(usuarios[i].getId() == itr2->first)
+              cout<<usuarios[i].getNome();
         }
-      return saida;
+      return "";
     }
   return "Usuário não conectado";
 }
-
-string Sistema::getNomeByID(int id){
-  for(int i=0; i<usuarios.size(); i++)
-    if(usuarios[i].getId() == id)
-      return usuarios[i].getNome();
-  return "-";
-}
-//Fim parte 1
 
 string Sistema::list_channels(int id) {
   string saida;
@@ -208,12 +197,8 @@ string Sistema::list_channels(int id) {
     if(itr->first == id)
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first){
-          vector<string> aux = servidores[i].getCanais();
-          for(int i=0; i<aux.size(); i++){
-            if(saida != "")
-                saida += "\n";
-            saida += aux[i];
-          }return saida;
+          servidores[i].printCanais();
+          return "";
         }
   return "Usuário não conectado";
 }
@@ -223,10 +208,9 @@ string Sistema::create_channel(int id, const string nome) {
     if(itr->first == id)
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first){
-          vector<string> aux = servidores[i].getCanais();
-          for(int i=0; i<aux.size(); i++)
-            if(aux[i] == nome)
-              return "Canal de texto ‘"+nome+"’ já existe!";
+          bool bol = servidores[i].checkCanal(nome);
+          if(bol == true)
+            return "Canal de texto ‘"+nome+"’ já existe!";
           servidores[i].addCanal(nome);
           return "Canal de texto ‘"+nome+"’ criado";
         }
@@ -238,13 +222,11 @@ string Sistema::enter_channel(int id, const string nome) {
     if(itr->first == id)
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first){
-          vector<string> aux = servidores[i].getCanais();
-          for(int j=0; j<aux.size(); j++)
-            if(aux[i] == nome){
-              (itr->second).second = nome;
-              return "Entrou no canal ‘"+nome+"’";
-            }
-          return "Canal ‘"+nome+"’ não existe";
+          bool bol = servidores[i].checkCanal(nome);
+          if(bol == false)
+            return "Canal ‘"+nome+"’ não existe";
+          (itr->second).second = nome;
+          return "Entrou no canal ‘"+nome+"’";         
         }
   return "Usuário não conectado";
 }
@@ -259,11 +241,29 @@ string Sistema::leave_channel(int id) {
 }
 
 string Sistema::send_message(int id, const string mensagem) {
-  return "send_message NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      if((itr->second).second == "")
+        return "Você não está em um canal";
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == (itr->second).first)
+          servidores[i].addMensagem_Server(id, mensagem, (itr->second).second);
+      return "Mensagem enviada";
+    }
+  return "Usuário não conectado";
 }
 
 string Sistema::list_messages(int id) {
-  return "list_messages NÃO IMPLEMENTADO";
+  for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+    if(itr->first == id){
+      if((itr->second).second == "")
+        return "Você não está em um canal";
+      for(int i=0; i<servidores.size(); i++)
+        if(servidores[i].getNome() == (itr->second).first)
+          servidores[i].printMensagens_Server((itr->second).second, usuarios);
+      return "";
+    }   
+  return "Usuário não conectado";
 }
 
 /* IMPLEMENTAR MÉTODOS PARA OS COMANDOS RESTANTES */
