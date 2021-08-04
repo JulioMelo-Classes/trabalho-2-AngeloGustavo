@@ -36,7 +36,7 @@ Teste 2(...)
 ```
 Teste 3(...) 
 ```console
-./concordo < ../data/teste3.txyt
+./concordo < ../data/teste3.txt
 ```
 
 ## Autor
