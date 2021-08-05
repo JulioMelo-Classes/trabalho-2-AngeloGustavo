@@ -18,22 +18,23 @@ string CanalTexto::getNome(){
     return this->nome;
 }
 
-void CanalTexto::addMensagem(int id, const string mensagem){//Mudar formato de data/hora
+void CanalTexto::addMensagem(int id, const string mensagem){
     Mensagem temp(this->HoraData(), id, mensagem);
     mensagens.push_back(temp);
 }
 
-void CanalTexto::printMensagens(vector<Usuario> usuarios){//Perguntar se da pra fazer sem levar o vetor de usuarios
-    string usuario;
+void CanalTexto::printMensagens(vector<Usuario> *usuarios){
     if(mensagens.size() == 0)
         cout<<"Sem mensagens para exibir";
     for(int i=0; i<mensagens.size(); i++){
         if(i>0)
             cout<<endl;
-        for(int j=0; j<usuarios.size(); j++)
-            if(usuarios[j].getId() == mensagens[i].getEnviadaPor())
-                usuario = usuarios[j].getNome();
-        cout<<usuario<<mensagens[i].getDataHora()<<": "<<mensagens[i].getConteudo();
+        for(auto itr=usuarios->begin(); itr!=usuarios->end(); ++itr)
+            if(itr->getId() == mensagens[i].getEnviadaPor()){
+                cout<<itr->getNome()<<mensagens[i].getDataHora()<<": "<<mensagens[i].getConteudo();
+                break;
+            }
+        
     }
 }
 
