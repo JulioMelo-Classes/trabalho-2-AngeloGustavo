@@ -97,6 +97,8 @@ string Sistema::set_server_invite_code(int id, const string nome, const string c
 string Sistema::list_servers(int id) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
+      if(servidores.size() == 0)
+        return "Não há servidores no sistema";
       for(int i=0; i<servidores.size(); i++){
         if(i>0)
           cout<<endl;
@@ -107,24 +109,20 @@ string Sistema::list_servers(int id) {
   return "Usuário não conectado";
 }
 
-string Sistema::remove_server(int id, const string nome) {//Rever uso do cont
-  int cont;
+string Sistema::remove_server(int id, const string nome) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
-      cont=0;
-      for(auto itr2=servidores.begin(); itr2!=servidores.end(); ++itr2){
-        if(nome == servidores[cont].getNome()){
-          if(servidores[cont].getDonoId() == id){
-            for(auto itr2=usuariosLogados.begin(); itr2!=usuariosLogados.end(); ++itr2)
-              if((itr2->second).first == nome)
-                itr2->second = {"",""};
-            servidores.erase(itr2);
+      for(int i=0; i<servidores.size(); i++)
+        if(nome == servidores[i].getNome()){
+          if(servidores[i].getDonoId() == id){
+            for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
+              if((itr->second).first == nome)
+                itr->second = {"",""};
+            servidores.erase(servidores.begin() + i);
             return "Servidor ‘"+nome+"’ removido";
           }else
             return "Você não é o dono do servidor ‘"+nome+"’";
         }
-        cont++;
-      }
       return "Servidor ‘"+nome+"’ não encontrado";
     }
   return "Usuário não logado";
@@ -192,7 +190,6 @@ string Sistema::list_participants(int id) {
 }
 
 string Sistema::list_channels(int id) {
-  string saida;
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id)
       for(int i=0; i<servidores.size(); i++)
