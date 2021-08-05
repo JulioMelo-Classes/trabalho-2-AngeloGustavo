@@ -71,7 +71,7 @@ void Servidor::addMensagem_Server(int id, const string mensagem, string canal){
             canaisTexto[i].addMensagem(id, mensagem);
 }
 
-void Servidor::printMensagens_Server(string canal, vector<Usuario> usuarios){
+void Servidor::printMensagens_Server(string canal, vector<Usuario>* usuarios){
     for(int i=0; i<canaisTexto.size(); i++)
         if(canaisTexto[i].getNome() == canal)
             canaisTexto[i].printMensagens(usuarios);
