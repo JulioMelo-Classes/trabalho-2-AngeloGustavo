@@ -37,15 +37,10 @@ string Servidor::getCodigo(){
 void Servidor::addParticipante(int _id){
     participantesIDs.push_back(_id);
 }
-void Servidor::delParticipante(int _id){//Reformular método
-    auto posicao = participantesIDs.begin();
-    int i=0;
-    for(auto itr=participantesIDs.begin(); itr!=participantesIDs.end(); ++itr){
-        if(participantesIDs[i] == _id)
-            posicao = itr;
-        i++;
-    }
-    participantesIDs.erase(posicao);
+void Servidor::delParticipante(int _id){
+    for(int i=0; i<participantesIDs.size(); i++)
+        if(participantesIDs.begin()[i] == _id)
+            participantesIDs.erase(participantesIDs.begin()+i);
 }
 
 void Servidor::printCanais(){
