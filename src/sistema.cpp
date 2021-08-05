@@ -257,7 +257,7 @@ string Sistema::list_messages(int id) {
         return "Você não está em um canal";
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first)
-          servidores[i].printMensagens_Server((itr->second).second, usuarios);
+          servidores[i].printMensagens_Server((itr->second).second, &usuarios);
       return "";
     }   
   return "Usuário não conectado";
