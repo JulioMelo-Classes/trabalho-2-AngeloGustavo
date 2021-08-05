@@ -130,7 +130,7 @@ class Servidor{
 		* @param canal 
 		* @param usuarios 
 		*/
-		void printMensagens_Server(string canal, vector<Usuario> usuarios);
+		void printMensagens_Server(string canal, vector<Usuario> *usuarios);
 };
 
 #endif
