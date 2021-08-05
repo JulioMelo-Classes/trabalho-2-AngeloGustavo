@@ -51,7 +51,7 @@ class CanalTexto{
 		* 
 		* @param usuarios 
 		*/
-		void printMensagens(vector<Usuario> usuarios);
+		void printMensagens(vector<Usuario> *usuarios);
 	
 		/**
 		* @brief Retorna string de Data e Hora no padrão especificado no documento do projeto
