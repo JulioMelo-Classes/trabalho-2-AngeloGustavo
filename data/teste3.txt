@@ -7,6 +7,7 @@ create-server 2 casa
 create-server 0 casa
 set-server-desc 1 casa "Mi casa"
 set-server-invite-code 1 casa casa123
+create-channel 0 sala
 remove-server 1 casa
 remove-server 0 casa
 list-servers 0
