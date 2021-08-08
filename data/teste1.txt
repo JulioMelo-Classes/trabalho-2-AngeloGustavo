@@ -8,7 +8,7 @@ set-server-desc 0 casa "Mi casa es su casa"
 set-server-invite-code 0 casa casa123
 list-servers 0
 enter-server 0 casa
-enter-server 1 casa
+enter-server 1 casa casa123 
 list-participants 0
 create-channel 0 sala
 create-channel 0 quarto
