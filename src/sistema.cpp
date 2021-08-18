@@ -66,11 +66,11 @@ string Sistema::set_server_desc(int id, const string nome, const string descrica
         if(servidores[i].getNome() == nome){
           if(servidores[i].getDonoId() == id){
             servidores[i].setDescricao(descricao);
-            return "Descrição do servidor ‘"+nome+"’ modificada!";
+            return "Descrição do servidor '"+nome+"' modificada!";
           }else
             return "Você não pode alterar a descrição de um servidor que não foi criado por você";
         }
-      return "Servidor ‘"+nome+"’ não existe";
+      return "Servidor '"+nome+"' não existe";
     }
   return "Usuário não conectado";
 }
@@ -83,13 +83,13 @@ string Sistema::set_server_invite_code(int id, const string nome, const string c
           if(servidores[i].getDonoId() == id){
             servidores[i].setCodigo(codigo);
             if(codigo != "")
-              return "Código de convite do servidor ‘"+nome+"’ modificado!";
+              return "Código de convite do servidor '"+nome+"' modificado!";
             else
-              return "Código de convite do servidor ‘"+nome+"’ removido!";
+              return "Código de convite do servidor '"+nome+"' removido!";
           }else
             return "Você não pode alterar o codigo de convite de um servidor que não foi criado por você";
         }
-      return "Servidor ‘"+nome+"’ não existe";
+      return "Servidor '"+nome+"' não existe";
     }
   return "Usuário não conectado";
 }
@@ -119,11 +119,11 @@ string Sistema::remove_server(int id, const string nome) {
               if((itr->second).first == nome)
                 itr->second = {"",""};
             servidores.erase(servidores.begin() + i);
-            return "Servidor ‘"+nome+"’ removido";
+            return "Servidor '"+nome+"' removido";
           }else
-            return "Você não é o dono do servidor ‘"+nome+"’";
+            return "Você não é o dono do servidor '"+nome+"'";
         }
-      return "Servidor ‘"+nome+"’ não encontrado";
+      return "Servidor '"+nome+"' não encontrado";
     }
   return "Usuário não logado";
 }
@@ -144,7 +144,7 @@ string Sistema::enter_server(int id, const string nome, const string codigo) {
           else 
             return "Código de convite errado";
         }
-      return "Servidor ‘"+nome+"’ não encontrado";
+      return "Servidor '"+nome+"' não encontrado";
     }
   return "Usuário não conectado";
 }
@@ -157,13 +157,13 @@ string Sistema::leave_server(int id, const string nome) {
           if(nome == (itr->second).first){
             servidores[i].delParticipante(id);
             itr->second = {"",""};
-            return "Saindo do servidor ‘"+nome+"’";
+            return "Saindo do servidor '"+nome+"'";
           }else if((itr->second).first == "")
             return "Você não está visualizando nenhum servidor";
           else
             return "Você não está nesse servidor";
         }
-      return "Servidor ‘"+nome+"’ não encontrado";
+      return "Servidor '"+nome+"' não encontrado";
     }
   return "Usuário não conectado";
 }
@@ -209,9 +209,9 @@ string Sistema::create_channel(int id, const string nome) {
         if(servidores[i].getNome() == (itr->second).first){
           bool bol = servidores[i].checkCanal(nome);
           if(bol == true)
-            return "Canal de texto ‘"+nome+"’ já existe!";
+            return "Canal de texto '"+nome+"' já existe!";
           servidores[i].addCanal(nome);
-          return "Canal de texto ‘"+nome+"’ criado";
+          return "Canal de texto '"+nome+"' criado";
         }
     }
   return "Usuário não conectado";
@@ -224,9 +224,9 @@ string Sistema::enter_channel(int id, const string nome) {
         if(servidores[i].getNome() == (itr->second).first){
           bool bol = servidores[i].checkCanal(nome);
           if(bol == false)
-            return "Canal ‘"+nome+"’ não existe";
+            return "Canal '"+nome+"' não existe";
           (itr->second).second = nome;
-          return "Entrou no canal ‘"+nome+"’";         
+          return "Entrou no canal '"+nome+"'";         
         }
   return "Usuário não conectado";
 }
