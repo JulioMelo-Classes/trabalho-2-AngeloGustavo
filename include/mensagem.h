@@ -15,6 +15,9 @@
 
 using namespace std;
 
+/*
+OK
+*/
 class Mensagem{
     private:
         string dataHora; //<! String de Data e Hora no padrão especificado no documento do projeto

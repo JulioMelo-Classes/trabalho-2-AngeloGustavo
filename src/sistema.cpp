@@ -128,10 +128,15 @@ string Sistema::remove_server(int id, const string nome) {
   return "Usuário não logado";
 }
 
+/*
+A2.7 0,8
+*/
 string Sistema::enter_server(int id, const string nome, const string codigo) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
-      if((itr->second).first != "")
+      //esse aqui não é um caso de erro, quando o enter server é chamado 2 vezes o sistema deve mudar o servidor que o usuário visualiza
+      //da forma como está aqui o usuário só consegue entrar em um servidor, vou tirar 20% por isso
+      if((itr->second).first != "") 
         return "Usuário ja está em um servidor";
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == nome){
@@ -149,6 +154,9 @@ string Sistema::enter_server(int id, const string nome, const string codigo) {
   return "Usuário não conectado";
 }
 
+/*
+A2.8 0,8
+*/
 string Sistema::leave_server(int id, const string nome) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -158,7 +166,10 @@ string Sistema::leave_server(int id, const string nome) {
             servidores[i].delParticipante(id);
             itr->second = {"",""};
             return "Saindo do servidor '"+nome+"'";
-          }else if((itr->second).first == "")
+          }else if((itr->second).first == "") 
+            //esse aqui também não é um caso de teste, leave server deve sair do servidor dado pelo usuário
+            //mesmo que ele não esteja visualizando qualquer. Nesse caso vou remover 20% uma vez que o usuário não
+            //consegue sair de servidores que ele não está visualizando
             return "Você não está visualizando nenhum servidor";
           else
             return "Você não está nesse servidor";
@@ -168,6 +179,9 @@ string Sistema::leave_server(int id, const string nome) {
   return "Usuário não conectado";
 }
 
+/*
+A.9 0,3
+*/
 string Sistema::list_participants(int id) {
   bool primeiro = true;
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
@@ -180,6 +194,12 @@ string Sistema::list_participants(int id) {
             primeiro = false;
           else
             cout<<endl;
+          /*essa não é a forma como esse método deve funcionar
+          o que você faz aqui é mostrar quais usuários estão visualizando
+          o servidor ao mesmo tempo que o usuário que chamou o comando,
+          na verdade esse comando deveria mostrar quais participantes fizeram
+          "enter-server" no servidor específico
+          vou considerar 30%*/
           for(int i=0; i<usuarios.size(); i++)
             if(usuarios[i].getId() == itr2->first)
               cout<<usuarios[i].getNome();
@@ -189,6 +209,9 @@ string Sistema::list_participants(int id) {
   return "Usuário não conectado";
 }
 
+/*
+B1.1 ok
+*/
 string Sistema::list_channels(int id) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id)
@@ -200,6 +223,9 @@ string Sistema::list_channels(int id) {
   return "Usuário não conectado";
 }
 
+/*
+B1.2 ok
+*/
 string Sistema::create_channel(int id, const string nome) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -208,7 +234,7 @@ string Sistema::create_channel(int id, const string nome) {
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first){
           bool bol = servidores[i].checkCanal(nome);
-          if(bol == true)
+          if(bol == true)//podia usar direto if(servidores[i].checkCanal(nome))
             return "Canal de texto '"+nome+"' já existe!";
           servidores[i].addCanal(nome);
           return "Canal de texto '"+nome+"' criado";
@@ -217,6 +243,9 @@ string Sistema::create_channel(int id, const string nome) {
   return "Usuário não conectado";
 }
 
+/*
+B1.3 ok
+*/
 string Sistema::enter_channel(int id, const string nome) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id)
@@ -231,6 +260,9 @@ string Sistema::enter_channel(int id, const string nome) {
   return "Usuário não conectado";
 }
 
+/*
+B1.4 ok
+*/
 string Sistema::leave_channel(int id) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -240,6 +272,9 @@ string Sistema::leave_channel(int id) {
   return "Usuário não conectado";
 }
 
+/*
+B2.1 ok
+*/
 string Sistema::send_message(int id, const string mensagem) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -253,6 +288,9 @@ string Sistema::send_message(int id, const string mensagem) {
   return "Usuário não conectado";
 }
 
+/*
+B2.2 ok
+*/
 string Sistema::list_messages(int id) {
   for(auto itr=usuariosLogados.begin(); itr!=usuariosLogados.end(); ++itr)
     if(itr->first == id){
@@ -260,7 +298,7 @@ string Sistema::list_messages(int id) {
         return "Você não está em um canal";
       for(int i=0; i<servidores.size(); i++)
         if(servidores[i].getNome() == (itr->second).first)
-          servidores[i].printMensagens_Server((itr->second).second, &usuarios);
+          servidores[i].printMensagens_Server((itr->second).second, &usuarios); //aqui vc poderia usar uma referencia de C++ ao invés de um ponteiro
       return "";
     }   
   return "Usuário não conectado";

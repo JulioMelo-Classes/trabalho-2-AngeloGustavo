@@ -18,6 +18,9 @@
 
 using namespace std;
 
+/*
+OK
+*/
 class CanalTexto{
 	private:
 		string nome; //<! Nome do canal de texto

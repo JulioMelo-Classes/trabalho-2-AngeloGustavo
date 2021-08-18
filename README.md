@@ -1,5 +1,7 @@
 # Projeto 2: Concordo
 Clone do Discord, para humanos mais civilizados.
+<!--Extras do concordo, faltaram os commits neste repositório da parte extra vou considerar 1.5
+    mesmo com os twinks que poderiam ser feitos acho que ficou boa a ideia -->
 
 ## O que é o Concordo?
 Um sistema com recursos similares ao Discord, mas que funciona somente em modo texto e sem recursos de
@@ -26,6 +28,7 @@ Ou pode criar um arquivo de texto com uma lista de comandos (um por linha) e exe
 ```
 ## Como executar o conjunto dos testes
 ### Para executar todas funcionalidades do sistema sem erros e com os erros execute os seguintes comandos:
+<!--documentação dos casos de teste ok!-->
 Teste 1 (Todos comandos sem erro)
 ```console
 ./concordo < ../data/teste1.txt

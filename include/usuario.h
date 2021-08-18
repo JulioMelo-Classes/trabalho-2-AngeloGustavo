@@ -13,7 +13,10 @@
 #include <string>
 
 using namespace std;
-	
+
+/*
+OK!
+*/
 class Usuario{
 	private:
 		int id; //<! ID do usuario
